@@ -7,7 +7,12 @@ local function parse(cmd)
 	fd:close()
 
 	local status = {}
-	status.volume = string.match(output, "(%d?%d?%d)%%") or "0"
+	status.volume = {}
+	local i = 1
+	for val in string.gmatch(output, "%[(%d+)%%%]") do
+		status.volume[i] = val
+		i = i + 1
+	end
 	status.muted = string.find(output, "[off]", 1, true) ~= nil
 	return status
 end
